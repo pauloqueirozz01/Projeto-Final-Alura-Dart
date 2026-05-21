@@ -8,15 +8,9 @@ void main() {
   // };
   List<String> names = [];
   List<double> notes = [];
+
   header();
   getCommand();
-}
-
-void addStudent(List<String> names) {
-  print("Digite o nome do aluno:");
-  String name = stdin.readLineSync()!;
-
-  if (name != "") {}
 }
 
 String getCommand() {
@@ -34,6 +28,23 @@ String getCommand() {
   return input!;
 }
 
+double calculateAverege(List<double> notes) {
+  double soma = 0;
+  for (note in notes) {
+    soma += note;
+  }
+}
+
+void addStudent(List<String> names) {
+  print("Digite o nome do aluno:");
+  String? name = stdin.readLineSync();
+
+  if (name != null && name.isNotEmpty) {
+    names.add(name);
+    print("O aluno $name foi adicionado a lista de ${names.length}");
+  }
+}
+
 void addNamesOfStudents(List<String> names, List<List<double>> notes) {
   print("Digite o nome do aluno:");
   String? name = stdin.readLineSync();
@@ -43,22 +54,23 @@ void addNamesOfStudents(List<String> names, List<List<double>> notes) {
     List<double> notesOfStudent = [];
 
     while (true) {
-      print("Digite uma nota para o aluno (ou ***fim*** para terminar)");
+      print(
+        "Digite uma nota do aluno ou ***fim*** para encerrar a execução do programa:",
+      );
       String? input = stdin.readLineSync();
 
-      if (input != null && input.isNotEmpty) {
-        double? nota = double.parse(input);
-        notes.add(notesOfStudent);
-      } else if ( input == null || input.isEmpty ){
-        print("Entrada inválida. Tente novamente");
-      }
+      if (input == "fim") {
+        break;
+      } else if (input != null && input.isNotEmpty) {
+        double? note = double.tryParse((input));
+        notesOfStudent.add(note!);
       }
     }
-    notes.add(notesOfStudent)x ;
+    notes.add(notesOfStudent);
   } else {
-    print("Nome inválido");
+    print("Nome digitado não condiz com o formato aceito. Tente novamente.");
+    addNamesOfStudents(names, notes);
   }
-  return;
 }
 
 void menu() {
