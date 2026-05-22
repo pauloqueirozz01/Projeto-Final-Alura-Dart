@@ -7,7 +7,27 @@ void main() {
   //   "João": [2, 9.25, 5.5],
   // };
   List<String> names = [];
-  List<double> notes = [];
+  List<List<double>> notes = [];
+  String? command;
+
+  while (command != 'sair') {
+    print('Escolha uma ação: registrar, listar, sair');
+    command = getCommand();
+
+    switch (command) {
+      case 'registrar':
+        addNamesOfStudents(names, notes);
+        break;
+      case 'listar':
+        listStudentsAndMedias(names, notes);
+        break;
+      case 'sair':
+        print('Saindo...');
+        break;
+      default:
+        print('Ação inválida.');
+    }
+  }
 
   header();
   getCommand();
@@ -15,9 +35,7 @@ void main() {
 
 String getCommand() {
   print("");
-  print(
-    "Digite um comando: 1 - Adicionar Aluno, 2 - Adicionar nota do aluno, 3 - Adicionar nome e nota do aluno, 4 - Sair",
-  );
+  print("Escolha uma ação: registrar, listar, sair");
   List<String> commands = <String>["1", "2", "3", "4"];
   String? input = stdin.readLineSync();
 
@@ -28,11 +46,12 @@ String getCommand() {
   return input!;
 }
 
-double calculateAverege(List<double> notes) {
+double calculateMedia(List<double> notes) {
   double soma = 0;
-  for (note in notes) {
+  for (var note in notes) {
     soma += note;
   }
+  return soma / notes.length;
 }
 
 void addStudent(List<String> names) {
@@ -42,6 +61,16 @@ void addStudent(List<String> names) {
   if (name != null && name.isNotEmpty) {
     names.add(name);
     print("O aluno $name foi adicionado a lista de ${names.length}");
+  }
+}
+
+void addNote(List<double> notes) {
+  print("Digite a nota do aluno:");
+  double? note = double.tryParse(stdin.readLineSync()!);
+
+  if (note != null && !note.isNaN) {
+    notes.add(note);
+    print("Nota adicionada: $note, lista de notas ${notes.length}");
   }
 }
 
@@ -73,21 +102,12 @@ void addNamesOfStudents(List<String> names, List<List<double>> notes) {
   }
 }
 
-void menu() {
-  print("");
-  header();
-  print("");
-  String command = getCommand();
-  print("");
-
-  switch (command) {
-    case "1":
-      addNamesOfStudents(names, notes);
-      break;
-    case "2":
-      break;
-    case "3":
-      break;
+void listStudentsAndMedias(List<String> names, List<List<double>> notes) {
+  print("Lista de Alunos e sua médias");
+  for (int i = 0; i < names.length; i++) {
+    //calculando a media dos alunos que foram informados na lista.
+    double media = calculateMedia(notes[i]);
+    print("${names[i]}: ${media.toStringAsFixed(2)}");
   }
 }
 
